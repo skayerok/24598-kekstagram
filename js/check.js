@@ -8,10 +8,8 @@ function getMessage(a, b) {
 
     case "boolean":
       if (a == true) {
-        console.log("case1.1");
         return "Переданное GIF-изображение анимировано и содержит " + b + " кадров";
       } else if (a == false) {
-        console.log("case1.2");
         return "Переданное GIF-изображение не анимировано";
       }
       break;
