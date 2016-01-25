@@ -119,6 +119,34 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+
+      var maskCanvas = document.createElement('canvas');
+      maskCanvas.width = this._container.width;
+      maskCanvas.height = this._container.height;
+      var maskCtx = maskCanvas.getContext('2d');
+
+      maskCtx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+
+      maskCtx.globalCompositeOperation = 'xor';
+
+      maskCtx.clearRect(
+          (this._container.width / 2) - (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
+          (this._container.height / 2) - (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
+          this._resizeConstraint.side + this._ctx.lineWidth / 2,
+          this._resizeConstraint.side + this._ctx.lineWidth / 2);
+      maskCtx.fill();
+
+     this._ctx.drawImage(maskCanvas, -maskCanvas.width / 2, - maskCanvas.height / 2 );
+
+     this._ctx.font = '16px Arial';
+     this._ctx.fillStyle = 'white';
+     var iamgeResolution = this._image.naturalWidth + 'x' + this._image.naturalHeight;
+     this._ctx.fillText(iamgeResolution,
+      -this._ctx.measureText(iamgeResolution).width / 2,
+      -(this._resizeConstraint.side / 2) - this._ctx.lineWidth - 5);
+
+
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
