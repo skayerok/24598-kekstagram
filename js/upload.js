@@ -72,7 +72,23 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    return true;
+    var resizeXValue = Number(resizeX.value);
+    var resizeYValue = Number(resizeY.value);
+    var resizeSizeValue = Number(resizeSize.value);
+
+    var notWider = resizeXValue + resizeSizeValue <= currentResizer._image.naturalWidth;
+    var notTaller = resizeYValue + resizeSizeValue <= currentResizer._image.naturalHeight;
+    var notNegative = resizeXValue >= 0 && resizeYValue >= 0;
+
+    if (notWider && notTaller && notNegative) {
+      forwardButton.innerHTML = '';
+      forwardButton.disabled = false;
+      return true;
+    }
+    forwardButton.disabled = true;
+    // var errorText = '"Слева" и "сторона" должны быть меньше ширины исходного изображения\n"Сверху" и "сторона" должны быть меньше высоты исходного изображения\n"Сверху" и "слева" не должны быть отрицательными';
+    // forwardButton.innerHTML = errorText;
+    return false;
   }
 
   /**
@@ -81,11 +97,20 @@
    */
   var uploadForm = document.forms['upload-select-image'];
 
+
   /**
    * Форма кадрирования изображения.
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+  var resizeX = resizeForm['resize-x'];
+  var resizeY = resizeForm['resize-y'];
+  var resizeSize = resizeForm['resize-size'];
+  var forwardButton = resizeForm['resize-fwd'];
+
+  resizeX.onchange = resizeFormIsValid;
+  resizeY.onchange = resizeFormIsValid;
+  resizeSize.onchange = resizeFormIsValid;
 
   /**
    * Форма добавления фильтра.
