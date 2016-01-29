@@ -76,19 +76,22 @@
     var resizeYValue = Number(resizeY.value);
     var resizeSizeValue = Number(resizeSize.value);
 
-    var notWider = resizeXValue + resizeSizeValue <= currentResizer._image.naturalWidth;
-    var notTaller = resizeYValue + resizeSizeValue <= currentResizer._image.naturalHeight;
-    var notNegative = resizeXValue >= 0 && resizeYValue >= 0;
+    resizeX.min = 0;
+    resizeY.min = 0;
+    resizeX.max = currentResizer._image.naturalWidth - resizeXValue;
+    resizeY.max = currentResizer._image.naturalHeight - resizeYValue;
+    resizeSize.max = (currentResizer._image.naturalWidth - resizeXValue) < (currentResizer._image.naturalHeight - resizeYValue) ? (currentResizer._image.naturalWidth - resizeXValue) : (currentResizer._image.naturalHeight - resizeYValue);
 
-    if (notWider && notTaller && notNegative) {
-      forwardButton.innerHTML = '';
-      forwardButton.disabled = false;
-      return true;
-    }
-    forwardButton.disabled = true;
+    for (var i = 0; i < document.querySelector(".upload-resize-controls").elements.length; i++){
+      if (!document.querySelector(".upload-resize-controls").elements[i].validity.valid) {
+        forwardButton.disabled = true;
+        return false;
+      }
+    };
     // var errorText = '"Слева" и "сторона" должны быть меньше ширины исходного изображения\n"Сверху" и "сторона" должны быть меньше высоты исходного изображения\n"Сверху" и "слева" не должны быть отрицательными';
     // forwardButton.innerHTML = errorText;
-    return false;
+    forwardButton.disabled = false;
+    return true;
   }
 
   /**
