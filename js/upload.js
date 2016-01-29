@@ -221,6 +221,17 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
+    var filters = document.querySelector('.upload-filter-controls').elements;
+    var today = new Date();
+    var fromBirthday = Math.round((today - new Date(2015, 10, 7)) / 24 / 60 / 60 / 1000);
+    var expires = today.setDate(today.getDate() + fromBirthday);
+
+    for (var i = 0; i < filters.length; i++) {
+      if (filters[i].checked) {
+        docCookies.setItem('selectedFilter', filters[i].value, Date(expires));
+      }
+    }
+
     cleanupResizer();
     updateBackground();
 
