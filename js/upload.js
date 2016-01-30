@@ -74,7 +74,8 @@
   function resizeFormIsValid() {
     var resizeXValue = Number(resizeX.value);
     var resizeYValue = Number(resizeY.value);
-    var resizeSizeValue = Number(resizeSize.value);
+    var valid = true;
+    var resizeControls = document.querySelector('.upload-resize-controls').elements;
 
     resizeX.min = 0;
     resizeY.min = 0;
@@ -82,16 +83,16 @@
     resizeY.max = currentResizer._image.naturalHeight - resizeYValue;
     resizeSize.max = (currentResizer._image.naturalWidth - resizeXValue) < (currentResizer._image.naturalHeight - resizeYValue) ? (currentResizer._image.naturalWidth - resizeXValue) : (currentResizer._image.naturalHeight - resizeYValue);
 
-    for (var i = 0; i < document.querySelector(".upload-resize-controls").elements.length; i++){
-      if (!document.querySelector(".upload-resize-controls").elements[i].validity.valid) {
-        forwardButton.disabled = true;
-        return false;
+    for (var i = 0; i < resizeControls.length; i++) {
+      if (!resizeControls[i].validity.valid) {
+        valid = false;
+        break;
       }
-    };
+    }
     // var errorText = '"Слева" и "сторона" должны быть меньше ширины исходного изображения\n"Сверху" и "сторона" должны быть меньше высоты исходного изображения\n"Сверху" и "слева" не должны быть отрицательными';
     // forwardButton.innerHTML = errorText;
-    forwardButton.disabled = false;
-    return true;
+    forwardButton.disabled = !valid;
+    return valid;
   }
 
   /**
