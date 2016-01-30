@@ -22,18 +22,16 @@ function getMessage(a, b) {
 
     case "object":
       if (Array.isArray(a) && !Array.isArray(b)) {
-        var sum = 0;
-        for (var i = 0; i < a.length; i++) {
-          sum += a[i];
-        }
+        var sum = a.reduce(function(sum, current) {
+          return sum + current;
+        }, 0);
         return "Количество красных точек во всех строчках изображения: " + sum;
 
 
       } else if (Array.isArray(a) && Array.isArray(b)) {
-        var square = 0;
-        for (var i = 0; i < a.length; i++) {
-          square += a[i] * b[i];
-        }
+        var square = a.reduce(function(square, current, index) {
+          return square + current * b[index];
+        }, 0);
         return "Общая площадь артефактов сжатия: " + square + " пикселей";
       }
       break;
