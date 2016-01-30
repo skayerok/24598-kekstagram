@@ -198,6 +198,16 @@
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
 
+      var selectedFilter = docCookies.getItem('selectedFilter');
+      for (var i = 0; i < filters.length; i++) {
+        if (selectedFilter === filters[i].value) {
+          filters[i].checked = true;
+          var filterClass = 'filter-' + selectedFilter;
+          filterImage.className = 'filter-image-preview ' + filterClass;
+          break;
+        }
+      }
+
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
@@ -236,15 +246,6 @@
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
-
-  filterForm.onload = function() {
-    for (var i = 0; i < filters.length; i++) {
-      if (docCookies.getItem('selectedFilter') === filters[i].value) {
-        filters[i].checked = true;
-        break;
-      }
-    }
   };
 
   /**
