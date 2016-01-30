@@ -1,4 +1,5 @@
 /* global Resizer: true */
+/* global docCookies: true */
 
 /**
  * @fileoverview
@@ -121,6 +122,8 @@
    * @type {HTMLFormElement}
    */
   var filterForm = document.forms['upload-filter'];
+  var filters = document.querySelector('.upload-filter-controls').elements;
+
 
   /**
    * @type {HTMLImageElement}
@@ -232,6 +235,26 @@
   };
 
   /**
+  * Автоматический выбор фильтра, выбранного в прошлый раз. Значение, выбранное
+  * в прошлый раз берется из cookie.
+  */
+  function selectFilter() {
+    var selectedFilter = docCookies.getItem('selectedFilter');
+    for (var i = 0; i < filters.length; i++) {
+      if (selectedFilter === filters[i].value) {
+        filters[i].checked = true;
+        var filterClass = 'filter-' + selectedFilter;
+        filterImage.className = 'filter-image-preview ' + filterClass;
+        break;
+      }
+    }
+  }
+
+  forwardButton.onclick = function() {
+    selectFilter();
+  };
+
+  /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
@@ -242,6 +265,20 @@
     resizeForm.classList.remove('invisible');
   };
 
+
+  function saveCookie() {
+    var today = new Date();
+    var fromBirthday = Math.round((today - new Date(2015, 10, 7)) / 24 / 60 / 60 / 1000);
+    var expires = today.setDate(today.getDate() + fromBirthday);
+
+    for (var i = 0; i < filters.length; i++) {
+      if (filters[i].checked) {
+        docCookies.setItem('selectedFilter', filters[i].value, Date(expires));
+        break;
+      }
+    }
+  }
+
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
@@ -250,6 +287,7 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
+    saveCookie();
     cleanupResizer();
     updateBackground();
 
