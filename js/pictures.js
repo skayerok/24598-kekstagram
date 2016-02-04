@@ -34,11 +34,43 @@ function getElementFromTemplate(data) {
   return element;
 }
 
-for (var i = 0; i < filters.length; i++) {
-  filters[i].onclick = function(evt) {
-    var clickedElementId = evt.target.id;
-    setActiveFilter(clickedElementId); //TODO. Написать функцию setActiveFilter
-  };
+function updateLoadedPictures(loadedPictures) {
+  for (var i = 0; i < filters.length; i++) {
+    filters[i].onclick = function(evt) {
+      var clickedElementId = evt.target.id;
+      setActiveFilter(clickedElementId, loadedPictures);
+    };
+  }
+}
+
+function setActiveFilter(id, loadedPictures) {
+  var filteredPictures = loadedPictures.slice(0);
+
+  if (id === loadedPictures) {
+    return;
+  }
+
+  switch (id) {
+    case 'filter-popular':
+      break;
+
+    case 'filter-new':
+      filteredPictures = filteredPictures.filter(function(element) {
+        var twoWeeksAgo = new Date(new Date() - 14 * 24 * 60 * 60 * 1000);
+        return Date.parse(element.date) > twoWeeksAgo;
+      }).sort(function(a, b) {
+        return Date.parse(b.date) - Date.parse(a.date);
+      });
+      break;
+
+    case 'filter-discussed':
+      filteredPictures.sort(function(a, b) {
+        return a.comments - b.comments;
+      });
+      break;
+  }
+
+  renderPictures(filteredPictures);
 }
 
 function renderPictures(pictures) {
@@ -61,9 +93,11 @@ function getPictures() {
     var loadedPictures = JSON.parse(rawData);
 
     renderPictures(loadedPictures);
+
+    updateLoadedPictures(loadedPictures);
   };
 
-  xhr.onprogress = function() {
+  xhr.onloadstart = function() {
     picturesContainer.classList.add('pictures-loading');
   };
 
