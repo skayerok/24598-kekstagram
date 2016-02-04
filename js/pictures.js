@@ -34,6 +34,24 @@ function getElementFromTemplate(data) {
   return element;
 }
 
+for (var i = 0; i < filters.length; i++) {
+  filters[i].onclick = function(evt) {
+    var clickedElementId = evt.target.id;
+    setActiveFilter(clickedElementId); //TODO. Написать функцию setActiveFilter
+  };
+}
+
+function renderPictures(pictures) {
+  picturesContainer.innerHTML = '';
+  var fragment = document.createDocumentFragment();
+
+  pictures.forEach(function(element) {
+    var loadedPicture = getElementFromTemplate(element);
+    fragment.appendChild(loadedPicture);
+  });
+  picturesContainer.appendChild(fragment);
+}
+
 function getPictures() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
@@ -42,14 +60,7 @@ function getPictures() {
     var rawData = evt.target.response;
     var loadedPictures = JSON.parse(rawData);
 
-    var fragment = document.createDocumentFragment();
-
-    loadedPictures.forEach(function(element) {
-      var loadedPicture = getElementFromTemplate(element);
-      fragment.appendChild(loadedPicture);
-    });
-
-    picturesContainer.appendChild(fragment);
+    renderPictures(loadedPictures);
   };
 
   xhr.onprogress = function() {
@@ -66,4 +77,3 @@ function getPictures() {
 getPictures();
 
 filters.classList.remove('hidden');
-
