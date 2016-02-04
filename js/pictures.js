@@ -19,7 +19,6 @@ function getElementFromTemplate(data) {
   element.querySelector('.picture-likes').textContent = data.likes;
 
   var oldPicture = element.querySelector('img');
-
   var newPicture = new Image(182, 182);
 
   newPicture.onload = function() {
@@ -39,20 +38,32 @@ function getPictures() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
   xhr.onload = function(evt) {
+    picturesContainer.classList.remove('pictures-loading');
     var rawData = evt.target.response;
-    var loadedPicture = JSON.parse(rawData);
+    var loadedPictures = JSON.parse(rawData);
+
+    var fragment = document.createDocumentFragment();
+
+    loadedPictures.forEach(function(element) {
+      var loadedPicture = getElementFromTemplate(element);
+      fragment.appendChild(loadedPicture);
+    });
+
+    picturesContainer.appendChild(fragment);
+  };
+
+  xhr.onprogress = function() {
+    picturesContainer.classList.add('pictures-loading');
+  };
+
+  xhr.onerror = function() {
+    picturesContainer.classList.add('pictures-failure');
   };
 
   xhr.send();
 }
 
 getPictures();
-
-
-// pictures.forEach(function(element) {
-//   var loadedPicture = getElementFromTemplate(element);
-//   picturesContainer.appendChild(loadedPicture);
-// });
 
 filters.classList.remove('hidden');
 
