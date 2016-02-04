@@ -1,5 +1,3 @@
-/* global pictures: true */
-
 'use strict';
 
 var filters = document.querySelector('.filters');
@@ -10,7 +8,7 @@ var picturesContainer = document.querySelector('.pictures');
 function getElementFromTemplate(data) {
   var pictureTemplate = document.querySelector('#picture-template');
 
-  var element = [];
+  var element = null;
   if ('content' in pictureTemplate) {
     element = pictureTemplate.content.children[0].cloneNode(true);
   } else {
@@ -37,10 +35,24 @@ function getElementFromTemplate(data) {
   return element;
 }
 
-pictures.forEach(function(element) {
-  var loadedPicture = getElementFromTemplate(element);
-  picturesContainer.appendChild(loadedPicture);
-});
+function getPictures() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
+  xhr.onload = function(evt) {
+    var rawData = evt.target.response;
+    var loadedPicture = JSON.parse(rawData);
+  };
+
+  xhr.send();
+}
+
+getPictures();
+
+
+// pictures.forEach(function(element) {
+//   var loadedPicture = getElementFromTemplate(element);
+//   picturesContainer.appendChild(loadedPicture);
+// });
 
 filters.classList.remove('hidden');
 
