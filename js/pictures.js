@@ -10,9 +10,9 @@ function getElementFromTemplate(data) {
 
   var element = null;
   if ('content' in pictureTemplate) {
-    element = pictureTemplate.content.children[0].cloneNode(true);
+    element = pictureTemplate.content.childNodes[1].cloneNode(true);
   } else {
-    element = pictureTemplate.children[0].cloneNode(true);
+    element = pictureTemplate.childNodes[1].cloneNode(true);
   }
 
   element.querySelector('.picture-comments').textContent = data.comments;
