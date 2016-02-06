@@ -34,16 +34,17 @@ function getElementFromTemplate(data) {
   return element;
 }
 
-function updateLoadedPictures(loadedPictures) {
-  for (var i = 0; i < filters.length; i++) {
-    filters[i].onclick = function(evt) {
-      var clickedElementId = evt.target.id;
-      setActiveFilter(clickedElementId, loadedPictures);
-    };
-  }
+var loadedPictures;
+
+
+for (var i = 0; i < filters.length; i++) {
+  filters[i].onclick = function(evt) {
+    var clickedElementId = evt.target.id;
+    setActiveFilter(clickedElementId, loadedPictures);
+  };
 }
 
-function setActiveFilter(id, loadedPictures) {
+function setActiveFilter(id) {
   var filteredPictures = loadedPictures.slice(0);
 
   if (id === loadedPictures) {
@@ -90,11 +91,10 @@ function getPictures() {
   xhr.onload = function(evt) {
     picturesContainer.classList.remove('pictures-loading');
     var rawData = evt.target.response;
-    var loadedPictures = JSON.parse(rawData);
+    loadedPictures = JSON.parse(rawData);
 
     renderPictures(loadedPictures);
 
-    updateLoadedPictures(loadedPictures);
   };
 
   xhr.onloadstart = function() {
