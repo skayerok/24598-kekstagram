@@ -271,9 +271,7 @@
     var fromBirthday = Math.round((today - new Date(2015, 10, 7)) / 24 / 60 / 60 / 1000);
     var expires = today.setDate(today.getDate() + fromBirthday);
 
-    var filtersCopy = Array.prototype.slice.call(filters);
-
-    var checkedFilter = filtersCopy.filter(function(element) {
+    var checkedFilter = [].filter.call(filters, function(element) {
       return element.checked;
     })[0];
 
