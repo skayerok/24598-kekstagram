@@ -70,12 +70,11 @@
     return element;
   }
 
-  var loadedPictures;
 
   [].forEach.call(filters, function(element) {
     element.onclick = function(evt) {
       var clickedElementId = evt.target.id;
-      setActiveFilter(clickedElementId, loadedPictures);
+      setActiveFilter(clickedElementId);
     };
   });
 
