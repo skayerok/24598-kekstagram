@@ -276,20 +276,12 @@
     var daysFromBirthday = fromBirthday / 24 / 60 / 60 / 1000;
 
     var expires = today.setDate(today.getDate() + daysFromBirthday);
-    console.log(expires);
 
     var checkedFilter = [].filter.call(filters, function(element) {
       return element.checked;
     })[0];
 
     docCookies.setItem('selectedFilter', checkedFilter.value, new Date(expires));
-
-    // for (var i = 0; i < filters.length; i++) {
-    //   if (filters[i].checked) {
-    //     docCookies.setItem('selectedFilter', filters[i].value, Date(expires));
-    //     break;
-    //   }
-    // }
   }
 
   /**
