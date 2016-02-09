@@ -268,14 +268,21 @@
 
   function saveCookie() {
     var today = new Date();
-    var fromBirthday = Math.round((today - new Date(2015, 10, 7)) / 24 / 60 / 60 / 1000);
-    var expires = today.setDate(today.getDate() + fromBirthday);
+
+    var fromBirthday = today - (new Date(today.getFullYear(), 10, 7)) > 0
+    ? today - (new Date(today.getFullYear(), 10, 7))
+    : today - (new Date(today.getFullYear() - 1, 10, 7));
+
+    var daysFromBirthday = fromBirthday / 24 / 60 / 60 / 1000;
+
+    var expires = today.setDate(today.getDate() + daysFromBirthday);
+    console.log(expires);
 
     var checkedFilter = [].filter.call(filters, function(element) {
       return element.checked;
     })[0];
 
-    docCookies.setItem('selectedFilter', checkedFilter.value, Date(expires));
+    docCookies.setItem('selectedFilter', checkedFilter.value, new Date(expires));
 
     // for (var i = 0; i < filters.length; i++) {
     //   if (filters[i].checked) {
