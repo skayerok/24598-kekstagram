@@ -104,9 +104,6 @@
           return b.comments - a.comments;
         });
         break;
-
-      default:
-        break;
     }
 
     renderPictures(filteredPictures);
