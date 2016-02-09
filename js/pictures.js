@@ -1,4 +1,5 @@
-;(function() {
+/*eslint strict: [2, "function"]*/
+(function() {
   'use strict';
 
   var picturesContainer = document.querySelector('.pictures');
