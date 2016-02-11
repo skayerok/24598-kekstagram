@@ -68,6 +68,8 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
+  var resizeControls = document.querySelector('.upload-resize-controls').elements;
+
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
@@ -76,22 +78,22 @@
     var resizeXValue = Number(resizeX.value);
     var resizeYValue = Number(resizeY.value);
     var valid = true;
-    var resizeControls = document.querySelector('.upload-resize-controls').elements;
 
     resizeX.min = 0;
     resizeY.min = 0;
     resizeX.max = currentResizer._image.naturalWidth - resizeXValue;
     resizeY.max = currentResizer._image.naturalHeight - resizeYValue;
-    resizeSize.max = (currentResizer._image.naturalWidth - resizeXValue) < (currentResizer._image.naturalHeight - resizeYValue) ? (currentResizer._image.naturalWidth - resizeXValue) : (currentResizer._image.naturalHeight - resizeYValue);
+    resizeSize.max = (currentResizer._image.naturalWidth - resizeXValue) < (currentResizer._image.naturalHeight - resizeYValue)
+    ? (currentResizer._image.naturalWidth - resizeXValue)
+    : (currentResizer._image.naturalHeight - resizeYValue);
 
-    for (var i = 0; i < resizeControls.length; i++) {
-      if (!resizeControls[i].validity.valid) {
+    [].forEach.call(resizeControls, function(element) {
+      if (!element.validity.valid) {
         valid = false;
-        break;
+        return;
       }
-    }
-    // var errorText = '"Слева" и "сторона" должны быть меньше ширины исходного изображения\n"Сверху" и "сторона" должны быть меньше высоты исходного изображения\n"Сверху" и "слева" не должны быть отрицательными';
-    // forwardButton.innerHTML = errorText;
+    });
+
     forwardButton.disabled = !valid;
     return valid;
   }
@@ -113,9 +115,9 @@
   var resizeSize = resizeForm['resize-size'];
   var forwardButton = resizeForm['resize-fwd'];
 
-  resizeX.onchange = resizeFormIsValid;
-  resizeY.onchange = resizeFormIsValid;
-  resizeSize.onchange = resizeFormIsValid;
+  [].forEach.call(resizeControls, function(element) {
+    element.addEventListener('change', resizeFormIsValid);
+  });
 
   /**
    * Форма добавления фильтра.
