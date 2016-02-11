@@ -173,7 +173,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -203,14 +203,14 @@
         showMessage(Action.ERROR);
       }
     }
-  };
+  });
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -218,14 +218,14 @@
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -234,12 +234,11 @@
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
+  });
 
   /**
-  * Автоматический выбор фильтра, выбранного в прошлый раз. Значение, выбранное
-  * в прошлый раз берется из cookie.
-  */
+   * Автоматический выбор фильтра, выбранного в последний раз. Значение берется из cookie
+   */
   function selectFilter() {
     var selectedFilter = docCookies.getItem('selectedFilter');
     for (var i = 0; i < filters.length; i++) {
@@ -252,33 +251,40 @@
     }
   }
 
-  forwardButton.onclick = function() {
+  forwardButton.addEventListener('click', function() {
     selectFilter();
-  };
+  });
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  filterForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  });
 
-
+/**
+ * Сохраняет выбранный фильтр в cookie со сроком жизни, равным времени, прошедшему с моего ДР
+ * @return {[type]} [description]
+ */
   function saveCookie() {
     var today = new Date();
-    var fromBirthday = Math.round((today - new Date(2015, 10, 7)) / 24 / 60 / 60 / 1000);
-    var expires = today.setDate(today.getDate() + fromBirthday);
 
-    for (var i = 0; i < filters.length; i++) {
-      if (filters[i].checked) {
-        docCookies.setItem('selectedFilter', filters[i].value, Date(expires));
-        break;
-      }
-    }
+    var fromBirthday = today - (new Date(today.getFullYear(), 10, 7)) > 0
+    ? today - (new Date(today.getFullYear(), 10, 7))
+    : today - (new Date(today.getFullYear() - 1, 10, 7));
+
+    var daysFromBirthday = fromBirthday / 24 / 60 / 60 / 1000;
+    var expires = today.setDate(today.getDate() + daysFromBirthday);
+
+    var checkedFilter = [].filter.call(filters, function(element) {
+      return element.checked;
+    })[0];
+
+    docCookies.setItem('selectedFilter', checkedFilter.value, new Date(expires));
   }
 
   /**
@@ -286,7 +292,7 @@
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     saveCookie();
@@ -295,13 +301,13 @@
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  filterForm.addEventListener('change', function() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -321,7 +327,7 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  };
+  });
 
   cleanupResizer();
   updateBackground();
