@@ -115,8 +115,35 @@
   var resizeSize = resizeForm['resize-size'];
   var forwardButton = resizeForm['resize-fwd'];
 
+/**
+ * Подставляет значения смещения в форму кадрирования изображения
+ * @param  {Number}
+ * @param  {Number}
+ * @param  {Number}
+ */
+  function riseFormSetInput(x, y, side) {
+    x.value = currentResizer.getConstraint().x;
+    y.value = currentResizer.getConstraint().y;
+    side.value = currentResizer.getConstraint().side;
+  }
+
   [].forEach.call(resizeControls, function(element) {
     element.addEventListener('change', resizeFormIsValid);
+    element.addEventListener('change', function() {
+      currentResizer.setConstraint(Number(resizeX.value), Number(resizeY.value), Number(resizeSize.value));
+    });
+  });
+
+  /**
+   * Обработчик события смещения кадра.
+   * При перемещении изображения, подставляет значения смещения в поля ввода.
+   * @type {event}
+   */
+  var resizerChange = document.createEvent('CustomEvent');
+  resizerChange.initCustomEvent('resizerchange', false, false, {});
+
+  window.addEventListener('resizerchange', function() {
+    riseFormSetInput(resizeX, resizeY, resizeSize);
   });
 
   /**
