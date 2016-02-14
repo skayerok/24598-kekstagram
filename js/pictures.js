@@ -113,24 +113,11 @@
         store.setFilter(clickedElement.id);
         currentPage = 0;
         renderPictures(currentPage, true);
-        bottomReached();
       }
     };
   });
 
 
-/**
- * Если виден конец страницы, то подгружает дополнительные изображения на нее, если они есть
- */
-  function bottomReached() {
-    var lastPictureOffset = document.querySelector('.pictures').lastChild.getBoundingClientRect();
-    var viewPortSize = window.innerHeight;
-    if (lastPictureOffset.top <= viewPortSize) {
-      if (currentPage < Math.ceil(store.getLength() / PAGE_SIZE)) {
-        renderPictures(++currentPage);
-      }
-    }
-  }
 
   function endVisible() {
     var lastPictureOffset = document.querySelector('.pictures').lastChild.getBoundingClientRect();
@@ -147,7 +134,11 @@
 
   window.addEventListener('scroll', function() {
     clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(bottomReached, 100);
+    scrollTimeout = setTimeout(function() {
+      if (endVisible()) {
+        renderPictures(++currentPage);
+      }
+    }, 100);
   });
 
 /**
