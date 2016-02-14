@@ -6,7 +6,6 @@
   var filters = document.querySelector('.filters');
   filters.classList.add('hidden');
 
-
   var store = new PictureStore();
 
 /**
@@ -75,13 +74,12 @@
   }
 
 
-  filters.addEventListener('click', function(evt) {
-    var clickedElement = evt.target;
-    if (clickedElement.classList.contains('filters-radio')) {
-      setActiveFilter(clickedElement.id);
-    }
+  [].forEach.call(filters, function(element) {
+    element.onclick = function(evt) {
+      var clickedElementId = evt.target.id;
+      setActiveFilter(clickedElementId);
+    };
   });
-
 
   var loadedPictures;
 
