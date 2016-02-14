@@ -121,7 +121,7 @@
  * @param  {Number}
  * @param  {Number}
  */
-  function riseFormSetInput(x, y, side) {
+  function resizeFormSetInput(x, y, side) {
     x.value = currentResizer.getConstraint().x;
     y.value = currentResizer.getConstraint().y;
     side.value = currentResizer.getConstraint().side;
@@ -140,7 +140,7 @@
    * @type {event}
    */
   window.addEventListener('resizerchange', function() {
-    riseFormSetInput(resizeX, resizeY, resizeSize);
+    resizeFormSetInput(resizeX, resizeY, resizeSize);
   });
 
   /**
