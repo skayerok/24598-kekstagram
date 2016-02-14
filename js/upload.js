@@ -139,9 +139,6 @@
    * При перемещении изображения, подставляет значения смещения в поля ввода.
    * @type {event}
    */
-  var resizerChange = document.createEvent('CustomEvent');
-  resizerChange.initCustomEvent('resizerchange', false, false, {});
-
   window.addEventListener('resizerchange', function() {
     riseFormSetInput(resizeX, resizeY, resizeSize);
   });
