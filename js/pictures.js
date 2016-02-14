@@ -189,15 +189,15 @@
     xhr.onload = function(evt) {
       picturesContainer.classList.remove('pictures-loading');
 
-      // try {
+      try {
         var data = JSON.parse(evt.target.response);
         store.setList(data);
         store.setFilter();
         renderPictures(0);
-      // } catch (e) {
-      //   //обработка ошибки
-      //   console.log('ошибка обработки данных!');
-      // }
+      } catch (e) {
+        //обработка ошибки
+        console.log('ошибка обработки данных!');
+      }
 
     };
 
