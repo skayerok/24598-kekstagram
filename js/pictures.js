@@ -3,39 +3,74 @@
   'use strict';
 
   var picturesContainer = document.querySelector('.pictures');
+  var pictureTemplate = document.querySelector('#picture-template');
+  var currentPage = 0;
+  var PAGE_SIZE = 12;
   var filters = document.querySelector('.filters');
   filters.classList.add('hidden');
 
-
-/**
- * Записывает массив с информацией о картинках в свою локальную переменную list при помощи метода
- * setList, и отдает сохраненный массив при попощи метода getList
- * @type {object} PictureStore - массив элементов в формате JSON с информацией о картинках
- * @return {object}  этот же массив
- */
   var store = new PictureStore();
 
+/**
+* Записывает массив с информацией о картинках в свою локальную переменную list при помощи метода
+* setList, и отдает сохраненный массив при попощи метода getList
+* @type {object} PictureStore - массив элементов в формате JSON с информацией о картинках
+* @return {object}  этот же массив
+*/
   function PictureStore() {
-    var _list = [];
+    var _list = [],
+      _filter = [];
 
     function getList() {
-      return _list;
+      return [].concat(_filter);
+    }
+
+    function setFilter(id) {
+      switch (id) {
+
+        case 'filter-new':
+          _filter = _list.filter(function(element) {
+            var twoWeeksAgo = new Date(new Date() - 14 * 24 * 60 * 60 * 1000);
+            return Date.parse(element.date) > twoWeeksAgo;
+          }).sort(function(a, b) {
+            return Date.parse(b.date) - Date.parse(a.date);
+          });
+          break;
+
+        case 'filter-discussed':
+          _filter = [].concat(_list).sort(function(a, b) {
+            return b.comments - a.comments;
+          });
+          break;
+
+        default:
+          _filter = [].concat(_list);
+          break;
+      }
     }
 
     function setList(newItems) {
       _list = _list.concat(newItems);
     }
 
+    function getLength() {
+      return _list.length;
+    }
+
     return {
       getList: getList,
-      setList: setList
+      setList: setList,
+      getLength: getLength,
+      setFilter: setFilter
     };
   }
 
-
+/**
+ * Получает шаблон со страницы и заполняет его полученными данными
+ * @param  {object} data - объект с информацией о картинке
+ * @return {object} - DOM-элемент, заполненный шаблон
+ */
   function getElementFromTemplate(data) {
-    var pictureTemplate = document.querySelector('#picture-template');
-
     var timer;
 
     var element = null;
@@ -73,52 +108,72 @@
 
   [].forEach.call(filters, function(element) {
     element.onclick = function(evt) {
-      var clickedElementId = evt.target.id;
-      setActiveFilter(clickedElementId);
+      var clickedElement = evt.target;
+      if (clickedElement.classList.contains('filters-radio')) {
+        store.setFilter(clickedElement.id);
+        currentPage = 0;
+        renderPictures(currentPage, true);
+      }
     };
   });
 
 
-  function setActiveFilter(id) {
 
-    // копируем исходный массив, потому что иначе получается, что 2 переменных ссылаются на один и тот же массив,
-    // и при сортировке одного массива, сортируется и исходный, и последовательное переключение по нескольким
-    // фильтрам идет некорректно
-
-    var filteredPictures = store.getList().slice(0);
-
-    switch (id) {
-
-      case 'filter-new':
-        filteredPictures = filteredPictures.filter(function(element) {
-          var twoWeeksAgo = new Date(new Date() - 14 * 24 * 60 * 60 * 1000);
-          return Date.parse(element.date) > twoWeeksAgo;
-        }).sort(function(a, b) {
-          return Date.parse(b.date) - Date.parse(a.date);
-        });
-        break;
-
-      case 'filter-discussed':
-        filteredPictures.sort(function(a, b) {
-          return b.comments - a.comments;
-        });
-        break;
+  function endVisible() {
+    var lastPictureOffset = document.querySelector('.pictures').lastChild.getBoundingClientRect();
+    var viewPortSize = window.innerHeight;
+    if (lastPictureOffset.top <= viewPortSize) {
+      if (currentPage < Math.ceil(store.getLength() / PAGE_SIZE)) {
+        return true;
+      }
     }
-
-    renderPictures(filteredPictures);
+    return false;
   }
 
-  function renderPictures(pictures) {
-    picturesContainer.innerHTML = '';
+  var scrollTimeout;
+
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      if (endVisible()) {
+        renderPictures(++currentPage);
+      }
+    }, 100);
+  });
+
+/**
+ * Отрисовывает картинки на странице
+ * @param  {object.<Array>} pictures - массив с картинками и информацией о них
+ * @param  {number} pageNumber - номер "страницы"
+ * @param  {boolean} replace - если true, то перед отрисовкой картинок очищает ранее загруженные картинки
+ */
+  function renderPictures(pageNumber, replace) {
+    if (replace) {
+      picturesContainer.innerHTML = '';
+    }
+
     var fragment = document.createDocumentFragment();
 
-    pictures.forEach(function(element) {
+    var picturesArr = store.getList();
+    var begin = pageNumber * PAGE_SIZE;
+    var to = begin + PAGE_SIZE;
+    var pagePictures = picturesArr.slice(begin, to);
+
+    pagePictures.forEach(function(element) {
       var loadedPicture = getElementFromTemplate(element);
       fragment.appendChild(loadedPicture);
     });
     picturesContainer.appendChild(fragment);
+    while (endVisible()) {
+      renderPictures(++currentPage);
+    }
   }
 
+
+/**
+ * Загружает картинки по заданному url. Информация должна быть в формате JSON
+ * @param  {string} url - путь загрузки информации
+ */
   function getPictures(url) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url);
@@ -128,7 +183,8 @@
       try {
         var data = JSON.parse(evt.target.response);
         store.setList(data);
-        renderPictures(data);
+        store.setFilter();
+        renderPictures(0);
       } catch (e) {
         //обработка ошибки
         console.log('ошибка обработки данных!');
@@ -147,7 +203,7 @@
     xhr.send();
   }
 
-  getPictures('http://o0.github.io/assets/json/pictures.json');
+  getPictures('https://o0.github.io/assets/json/pictures.json');
 
   filters.classList.remove('hidden');
 })();
