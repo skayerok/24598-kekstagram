@@ -198,7 +198,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.addEventListener('change', function(evt) {
+  function uploadPictureHandler(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -228,7 +228,9 @@
         showMessage(Action.ERROR);
       }
     }
-  });
+  }
+
+  uploadForm.addEventListener('change', uploadPictureHandler);
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
