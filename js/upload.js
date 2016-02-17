@@ -187,17 +187,6 @@
     return uploadMessage;
   }
 
-  function changeSize() {
-    var INITIAL_SIDE_RATIO = 0.75;
-
-    var side = Math.min(
-          currentResizer._image.naturalHeight * INITIAL_SIDE_RATIO,
-          currentResizer._image.naturalWidth * INITIAL_SIDE_RATIO);
-    resizeX.value = currentResizer._image.naturalWidth / 2 - side / 2;
-    resizeY.value = currentResizer._image.naturalHeight / 2 - side / 2;
-    resizeSize.value = side;
-  }
-
   function hideMessage() {
     uploadMessage.classList.add('invisible');
   }
@@ -228,7 +217,6 @@
 
           uploadForm.classList.add('invisible');
           resizeForm.classList.remove('invisible');
-          changeSize();
 
           hideMessage();
         };
