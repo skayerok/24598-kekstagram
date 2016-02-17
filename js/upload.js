@@ -122,9 +122,10 @@
  * @param  {Number}
  */
   function resizeFormSetInput(x, y, side) {
-    x.value = currentResizer.getConstraint().x;
-    y.value = currentResizer.getConstraint().y;
-    side.value = currentResizer.getConstraint().side;
+    var picturePosition = currentResizer.getConstraint();
+    x.value = picturePosition.x;
+    y.value = picturePosition.y;
+    side.value = picturePosition.side;
   }
 
   [].forEach.call(resizeControls, function(element) {
@@ -216,7 +217,6 @@
 
           uploadForm.classList.add('invisible');
           resizeForm.classList.remove('invisible');
-
           hideMessage();
         };
 
