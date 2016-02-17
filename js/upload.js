@@ -121,16 +121,16 @@
  * @param  {Number}
  * @param  {Number}
  */
-  function resizeFormSetInput(x, y, side) {
+  function resizeFormSetInput() {
     var picturePosition = currentResizer.getConstraint();
-    x.value = picturePosition.x;
-    y.value = picturePosition.y;
-    side.value = picturePosition.side;
+    resizeX.value = picturePosition.x;
+    resizeY.value = picturePosition.y;
+    resizeSize.value = picturePosition.side;
   }
 
   [].forEach.call(resizeControls, function(element) {
     element.addEventListener('change', resizeFormIsValid);
-    element.addEventListener('change', function() {
+    element.addEventListener('input', function() {
       currentResizer.setConstraint(Number(resizeX.value), Number(resizeY.value), Number(resizeSize.value));
     });
   });
@@ -141,7 +141,7 @@
    * @type {event}
    */
   window.addEventListener('resizerchange', function() {
-    resizeFormSetInput(resizeX, resizeY, resizeSize);
+    resizeFormSetInput();
   });
 
   /**
@@ -187,6 +187,17 @@
     return uploadMessage;
   }
 
+  function changeSize() {
+    var INITIAL_SIDE_RATIO = 0.75;
+
+    var side = Math.min(
+          currentResizer._image.naturalHeight * INITIAL_SIDE_RATIO,
+          currentResizer._image.naturalWidth * INITIAL_SIDE_RATIO);
+    resizeX.value = currentResizer._image.naturalWidth / 2 - side / 2;
+    resizeY.value = currentResizer._image.naturalHeight / 2 - side / 2;
+    resizeSize.value = side;
+  }
+
   function hideMessage() {
     uploadMessage.classList.add('invisible');
   }
@@ -217,6 +228,8 @@
 
           uploadForm.classList.add('invisible');
           resizeForm.classList.remove('invisible');
+          changeSize();
+
           hideMessage();
         };
 
