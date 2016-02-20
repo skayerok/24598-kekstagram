@@ -1,9 +1,10 @@
 /*eslint strict: [2, "function"]*/
+/*global Photo: true*/
 (function() {
   'use strict';
 
   var picturesContainer = document.querySelector('.pictures');
-  var pictureTemplate = document.querySelector('#picture-template');
+  // var pictureTemplate = document.querySelector('#picture-template');
   var currentPage = 0;
   var PAGE_SIZE = 12;
   var filters = document.querySelector('.filters');
@@ -65,46 +66,6 @@
     };
   }
 
-/**
- * Получает шаблон со страницы и заполняет его полученными данными
- * @param  {object} data - объект с информацией о картинке
- * @return {object} - DOM-элемент, заполненный шаблон
- */
-  function getElementFromTemplate(data) {
-    var timer;
-
-    var element = null;
-    if ('content' in pictureTemplate) {
-      element = pictureTemplate.content.childNodes[1].cloneNode(true);
-    } else {
-      element = pictureTemplate.childNodes[1].cloneNode(true);
-    }
-
-    element.querySelector('.picture-comments').textContent = data.comments;
-    element.querySelector('.picture-likes').textContent = data.likes;
-
-    var oldPicture = element.querySelector('img');
-    var newPicture = new Image(182, 182);
-
-    newPicture.onload = function() {
-      clearTimeout(timer);
-      element.replaceChild(newPicture, oldPicture);
-    };
-
-    newPicture.onerror = function() {
-      element.classList.add('picture-load-failure');
-    };
-
-    newPicture.src = data.url;
-
-    timer = setTimeout(function() {
-      newPicture.src = '';
-      element.classList.add('picture-load-failure');
-    }, 5000);
-
-    return element;
-  }
-
 
   [].forEach.call(filters, function(element) {
     element.onclick = function(evt) {
@@ -141,6 +102,7 @@
     }, 100);
   });
 
+
 /**
  * Отрисовывает картинки на странице
  * @param  {object.<Array>} pictures - массив с картинками и информацией о них
@@ -150,6 +112,9 @@
   function renderPictures(pageNumber, replace) {
     if (replace) {
       picturesContainer.innerHTML = '';
+      [].forEach.call(picturesContainer.childNodes, function(element) {
+        picturesContainer.removeChild(element);
+      });
     }
 
     var fragment = document.createDocumentFragment();
@@ -160,8 +125,9 @@
     var pagePictures = picturesArr.slice(begin, to);
 
     pagePictures.forEach(function(element) {
-      var loadedPicture = getElementFromTemplate(element);
-      fragment.appendChild(loadedPicture);
+      var pictureElement = new Photo(element);
+      pictureElement.render();
+      fragment.appendChild(pictureElement.element);
     });
     picturesContainer.appendChild(fragment);
     while (endVisible()) {
