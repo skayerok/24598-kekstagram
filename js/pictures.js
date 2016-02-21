@@ -1,5 +1,5 @@
 /*eslint strict: [2, "function"]*/
-/*global Photo: true*/
+/*global Photo: true, Gallery: true*/
 (function() {
   'use strict';
 
@@ -7,6 +7,7 @@
   // var pictureTemplate = document.querySelector('#picture-template');
   var currentPage = 0;
   var PAGE_SIZE = 12;
+  var gallery = new Gallery();
   var filters = document.querySelector('.filters');
   filters.classList.add('hidden');
 
@@ -79,6 +80,12 @@
   });
 
 
+  // [].forEach.call(picturesContainer.childNodes, function(element) {
+  //   element.preventDefault();
+  //   element.addEventListener('click', gallery.show);
+  // });
+
+
 
   function endVisible() {
     var lastPictureOffset = document.querySelector('.pictures').lastChild.getBoundingClientRect();
@@ -103,6 +110,11 @@
   });
 
 
+  function pictureClickHandler(evt) {
+    evt.preventDefault();
+    gallery.show();
+  }
+
 /**
  * Отрисовывает картинки на странице
  * @param  {object.<Array>} pictures - массив с картинками и информацией о них
@@ -113,6 +125,7 @@
     if (replace) {
       picturesContainer.innerHTML = '';
       [].forEach.call(picturesContainer.childNodes, function(element) {
+        element.removeEventListener('click', pictureClickHandler);
         picturesContainer.removeChild(element);
       });
     }
@@ -127,6 +140,7 @@
     pagePictures.forEach(function(element) {
       var pictureElement = new Photo(element);
       pictureElement.render();
+      pictureElement.element.addEventListener('click', pictureClickHandler);
       fragment.appendChild(pictureElement.element);
     });
     picturesContainer.appendChild(fragment);
