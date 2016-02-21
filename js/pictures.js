@@ -140,8 +140,8 @@
     pagePictures.forEach(function(element) {
       var pictureElement = new Photo(element);
       pictureElement.render();
-      fragment.appendChild(pictureElement.element);
       pictureElement.element.addEventListener('click', pictureClickHandler);
+      fragment.appendChild(pictureElement.element);
     });
     picturesContainer.appendChild(fragment);
     while (endVisible()) {
