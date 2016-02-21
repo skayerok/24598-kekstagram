@@ -1,5 +1,5 @@
 /*eslint strict: [2, "function"]*/
-/*global Photo: true*/
+/*global Photo: true, Gallery: true*/
 (function() {
   'use strict';
 
@@ -7,6 +7,7 @@
   // var pictureTemplate = document.querySelector('#picture-template');
   var currentPage = 0;
   var PAGE_SIZE = 12;
+  var gallery = new Gallery();
   var filters = document.querySelector('.filters');
   filters.classList.add('hidden');
 
@@ -76,6 +77,14 @@
         renderPictures(currentPage, true);
       }
     };
+  });
+
+  picturesContainer.addEventListener('click', function(evt) {
+    evt.preventDefault();
+    var clickedElement = evt.target;
+    if (clickedElement.nodeName === 'IMG') {
+      gallery.show();
+    }
   });
 
 
