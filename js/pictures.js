@@ -79,13 +79,11 @@
     };
   });
 
-  picturesContainer.addEventListener('click', function(evt) {
-    evt.preventDefault();
-    var clickedElement = evt.target;
-    if (clickedElement.nodeName === 'IMG') {
-      gallery.show();
-    }
-  });
+
+  // [].forEach.call(picturesContainer.childNodes, function(element) {
+  //   element.preventDefault();
+  //   element.addEventListener('click', gallery.show);
+  // });
 
 
 
@@ -112,6 +110,11 @@
   });
 
 
+  function pictureClickHandler(evt) {
+    evt.preventDefault();
+    gallery.show();
+  }
+
 /**
  * Отрисовывает картинки на странице
  * @param  {object.<Array>} pictures - массив с картинками и информацией о них
@@ -122,6 +125,7 @@
     if (replace) {
       picturesContainer.innerHTML = '';
       [].forEach.call(picturesContainer.childNodes, function(element) {
+        element.removeEventListener('click', pictureClickHandler);
         picturesContainer.removeChild(element);
       });
     }
@@ -137,6 +141,7 @@
       var pictureElement = new Photo(element);
       pictureElement.render();
       fragment.appendChild(pictureElement.element);
+      pictureElement.element.addEventListener('click', pictureClickHandler);
     });
     picturesContainer.appendChild(fragment);
     while (endVisible()) {
