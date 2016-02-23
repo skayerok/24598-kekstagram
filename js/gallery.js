@@ -1,4 +1,5 @@
 /*eslint strict: [2, "function"]*/
+/*global store: true*/
 (function() {
   'use strict';
 
@@ -8,8 +9,10 @@
   function Gallery() {
     this.element = document.querySelector('.gallery-overlay');
 
-    this._closeButton = document.querySelector('.gallery-overlay-close');
-    this._photo = document.querySelector('.gallery-overlay-image');
+    this._closeButton = this.element.querySelector('.gallery-overlay-close');
+    this._photo = this.element.querySelector('.gallery-overlay-image');
+    this._likes = this.element.querySelector('.gallery-overlay-controls-like span');
+    this._comments = this.element.querySelector('.gallery-overlay-controls-comments span');
 
     this._onCloseClick = this._onCloseClick.bind(this);
     this._onPhotoClick = this._onPhotoClick.bind(this);
@@ -47,16 +50,40 @@
  * функция для обработки клика по изображению
  */
   Gallery.prototype._onPhotoClick = function() {
-    console.log('клик по изображению');
+    if (this.number < store.getLength()) {
+      this.setCurrentPicture(++this.number);
+    }
   };
 
 /**
  *  закрывает галерею по нажатию Esc
  */
   Gallery.prototype._onDocumentKeyDown = function(evt) {
-    if (evt.keyCode === 27) {
-      this.hide();
+    switch (evt.keyCode) {
+      case 27:
+        this.hide();
+        break;
+
+      case 37:
+        this.setCurrentPicture(--this.number);
+        break;
+
+      case 39:
+        this.setCurrentPicture(++this.number);
+        break;
     }
+  };
+
+/**
+ * подставляет картинку и количество лайков и комментариев в галерею.
+ * @param {Number} number номер картинки по порядку
+ */
+  Gallery.prototype.setCurrentPicture = function(number) {
+    var element = store.getList()[number];
+    this.number = number;
+    this._photo.src = element.url;
+    this._likes.textContent = element.likes;
+    this._comments.textContent = element.comments;
   };
 
   window.Gallery = Gallery;

@@ -8,6 +8,7 @@
 
   Photo.prototype.render = function() {
     var timer;
+    var i = 0;
     var pictureTemplate = document.querySelector('#picture-template');
 
     if ('content' in pictureTemplate) {
@@ -18,6 +19,7 @@
 
     this.element.querySelector('.picture-comments').textContent = this._data.comments;
     this.element.querySelector('.picture-likes').textContent = this._data.likes;
+    this.number = i++;
 
     var oldPicture = this.element.querySelector('img');
     var newPicture = new Image(182, 182);
@@ -37,6 +39,18 @@
       newPicture.src = '';
       this.element.classList.add('picture-load-failure');
     }.bind(this), 5000);
+
+    this.element.addEventListener('click', function(evt) {
+      evt.preventDefault();
+      if (this.element.classList.contains('picture') &&
+        !this.element.classList.contains('picture-load-failure')) {
+        if (typeof this.onClick === 'function') {
+          this.onClick();
+        }
+      }
+    }.bind(this));
+
+    this.onClick = null;
 
   };
 
