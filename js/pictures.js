@@ -70,7 +70,7 @@
     var begin = pageNumber * PAGE_SIZE;
     var to = begin + PAGE_SIZE;
     var pagePictures = picturesArr.slice(begin, to);
-    var pictureNumber = 0;
+    var pictureNumber = 0 + PAGE_SIZE * pageNumber;
 
     pagePictures.forEach(function(element) {
       var pictureElement = new Photo(element);
@@ -78,6 +78,7 @@
       pictureElement.number = pictureNumber++;
       fragment.appendChild(pictureElement.element);
       pictureElement.onClick = function() {
+        console.log(this.number);
         gallery.setCurrentPicture(pictureElement.number);
         gallery.show();
       };
