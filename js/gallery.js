@@ -50,7 +50,7 @@
  * функция для обработки клика по изображению
  */
   Gallery.prototype._onPhotoClick = function() {
-    if (this.number < store.getLength()) {
+    if (this.number < store.getLength() - 1) {
       this.setCurrentPicture(++this.number);
     }
   };
@@ -65,11 +65,13 @@
         break;
 
       case 37:
-        this.setCurrentPicture(--this.number);
+        if (this.number > 0) {
+          this.setCurrentPicture(--this.number);
+        }
         break;
 
       case 39:
-        this.setCurrentPicture(++this.number);
+        this._onPhotoClick();
         break;
     }
   };

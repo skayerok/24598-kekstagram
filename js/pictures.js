@@ -78,7 +78,6 @@
       pictureElement.number = pictureNumber++;
       fragment.appendChild(pictureElement.element);
       pictureElement.onClick = function() {
-        console.log(this.number);
         gallery.setCurrentPicture(pictureElement.number);
         gallery.show();
       };
