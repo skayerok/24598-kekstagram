@@ -81,7 +81,7 @@
  * @param {Number} number номер картинки по порядку
  */
   Gallery.prototype.setCurrentPicture = function(number) {
-    var element = store.getList()[number];
+    var element = store.getItem(number);
     this.number = number;
     this._photo.src = element.url;
     this._likes.textContent = element.likes;
