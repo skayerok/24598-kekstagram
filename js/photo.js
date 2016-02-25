@@ -4,6 +4,9 @@
 
   function Photo(data) {
     this._data = data;
+    this.onClick = null;
+    this.number = null;
+    this.element = null;
   }
 
   Photo.prototype.render = function() {
@@ -49,9 +52,6 @@
         }
       }
     }.bind(this));
-
-    this.onClick = null;
-
   };
 
   window.Photo = Photo;

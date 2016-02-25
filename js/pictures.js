@@ -70,7 +70,7 @@
     var begin = pageNumber * PAGE_SIZE;
     var to = begin + PAGE_SIZE;
     var pagePictures = picturesArr.slice(begin, to);
-    var pictureNumber = 0 + PAGE_SIZE * pageNumber;
+    var pictureNumber = PAGE_SIZE * pageNumber;
 
     pagePictures.forEach(function(element) {
       var pictureElement = new Photo(element);

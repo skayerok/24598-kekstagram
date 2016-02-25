@@ -16,6 +16,10 @@
       return [].concat(_filter);
     }
 
+    function getItem(number) {
+      return getList()[number];
+    }
+
     function setFilter(id) {
       switch (id) {
 
@@ -50,6 +54,7 @@
 
     return {
       getList: getList,
+      getItem: getItem,
       setList: setList,
       getLength: getLength,
       setFilter: setFilter
