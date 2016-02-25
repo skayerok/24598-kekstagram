@@ -12,6 +12,7 @@
   filters.classList.add('hidden');
 
   var store = new PictureStore();
+  window.store = store;
 
 
   [].forEach.call(filters, function(element) {
@@ -24,13 +25,6 @@
       }
     };
   });
-
-
-  // [].forEach.call(picturesContainer.childNodes, function(element) {
-  //   element.preventDefault();
-  //   element.addEventListener('click', gallery.show);
-  // });
-
 
 
   function endVisible() {
@@ -56,11 +50,6 @@
   });
 
 
-  function pictureClickHandler(evt) {
-    evt.preventDefault();
-    gallery.show();
-  }
-
 /**
  * Отрисовывает картинки на странице
  * @param  {object.<Array>} pictures - массив с картинками и информацией о них
@@ -69,11 +58,10 @@
  */
   function renderPictures(pageNumber, replace) {
     if (replace) {
-      picturesContainer.innerHTML = '';
-      [].forEach.call(picturesContainer.childNodes, function(element) {
-        element.removeEventListener('click', pictureClickHandler);
-        picturesContainer.removeChild(element);
-      });
+      var picturesLength = picturesContainer.childNodes.length;
+      for (var i = 0; i < picturesLength; i++) {
+        picturesContainer.removeChild(picturesContainer.childNodes[0]);
+      }
     }
 
     var fragment = document.createDocumentFragment();
@@ -82,12 +70,17 @@
     var begin = pageNumber * PAGE_SIZE;
     var to = begin + PAGE_SIZE;
     var pagePictures = picturesArr.slice(begin, to);
+    var pictureNumber = PAGE_SIZE * pageNumber;
 
     pagePictures.forEach(function(element) {
       var pictureElement = new Photo(element);
       pictureElement.render();
-      pictureElement.element.addEventListener('click', pictureClickHandler);
+      pictureElement.number = pictureNumber++;
       fragment.appendChild(pictureElement.element);
+      pictureElement.onClick = function() {
+        gallery.setCurrentPicture(pictureElement.number);
+        gallery.show();
+      };
     });
     picturesContainer.appendChild(fragment);
     while (endVisible()) {
