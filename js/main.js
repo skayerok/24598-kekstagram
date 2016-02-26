@@ -2,5 +2,3 @@
 
 require('./upload');
 require('./pictures');
-
-
