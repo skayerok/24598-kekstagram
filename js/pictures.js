@@ -1,16 +1,17 @@
 /*eslint strict: [2, "function"]*/
 /*global Photo: true, Gallery: true, PictureStore: true*/
-(function() {
   'use strict';
 
   var picturesContainer = document.querySelector('.pictures');
   // var pictureTemplate = document.querySelector('#picture-template');
   var currentPage = 0;
   var PAGE_SIZE = 12;
+  var Gallery = require('./gallery');
   var gallery = new Gallery();
   var filters = document.querySelector('.filters');
   filters.classList.add('hidden');
 
+  var PictureStore = require('./pictureStore');
   var store = new PictureStore();
   window.store = store;
 
@@ -73,6 +74,7 @@
     var pictureNumber = PAGE_SIZE * pageNumber;
 
     pagePictures.forEach(function(element) {
+      var Photo = require('./photo');
       var pictureElement = new Photo(element);
       pictureElement.render();
       pictureElement.number = pictureNumber++;
@@ -125,4 +127,3 @@
   getPictures('https://o0.github.io/assets/json/pictures.json');
 
   filters.classList.remove('hidden');
-})();

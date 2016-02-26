@@ -1,5 +1,4 @@
 /*eslint strict: [2, "function"]*/
-(function() {
   'use strict';
 
   /**
@@ -61,5 +60,4 @@
     };
   }
 
-  window.PictureStore = PictureStore;
-})();
+  module.exports = PictureStore;

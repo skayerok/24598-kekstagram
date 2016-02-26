@@ -1,6 +1,5 @@
 /*eslint strict: [2, "function"]*/
 /*global store: true*/
-(function() {
   'use strict';
 
 /**
@@ -17,7 +16,7 @@
     this._onCloseClick = this._onCloseClick.bind(this);
     this._onPhotoClick = this._onPhotoClick.bind(this);
     this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
-  }
+  };
 
 /**
  * показывает галерею
@@ -56,7 +55,7 @@
   };
 
 /**
- *  закрывает галерею по нажатию Esc
+ *  закрывает галерею по нажатию Esc и пролистывает ее при нажатии стрелочек на клавиатуре
  */
   Gallery.prototype._onDocumentKeyDown = function(evt) {
     switch (evt.keyCode) {
@@ -88,5 +87,4 @@
     this._comments.textContent = element.comments;
   };
 
-  window.Gallery = Gallery;
-})();
+  module.exports = Gallery;

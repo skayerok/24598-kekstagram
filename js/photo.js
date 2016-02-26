@@ -1,5 +1,4 @@
 /*eslint strict: [2, "function"]*/
-(function() {
   'use strict';
 
   function Photo(data) {
@@ -54,5 +53,4 @@
     }.bind(this));
   };
 
-  window.Photo = Photo;
-})();
+  module.exports = Photo;

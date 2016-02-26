@@ -8,7 +8,6 @@
 
 'use strict';
 
-(function() {
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -211,6 +210,7 @@
         fileReader.onload = function() {
           cleanupResizer();
 
+          var Resizer = require('./resizer');
           currentResizer = new Resizer(fileReader.result);
           currentResizer.setElement(resizeForm);
           uploadMessage.classList.add('invisible');
@@ -358,4 +358,3 @@
 
   cleanupResizer();
   updateBackground();
-})();
