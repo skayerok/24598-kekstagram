@@ -1,5 +1,7 @@
 'use strict';
 
+var store = null;
+
 /**
 * Записывает массив с информацией о картинках в свою локальную переменную list при помощи метода
 * setList, и отдает сохраненный массив при попощи метода getList
@@ -59,4 +61,8 @@ function PictureStore() {
   };
 }
 
-module.exports = PictureStore;
+if(!store) {
+  store = new PictureStore();
+}
+
+module.exports = store;

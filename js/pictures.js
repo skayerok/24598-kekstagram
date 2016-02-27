@@ -1,16 +1,16 @@
 'use strict';
 
+var Gallery = require('./gallery');
+var Photo = require('./photo');
+var store = require('./pictureStore');
+
 var picturesContainer = document.querySelector('.pictures');
 var currentPage = 0;
 var PAGE_SIZE = 12;
-var Gallery = require('./gallery');
 var gallery = new Gallery();
 var filters = document.querySelector('.filters');
 filters.classList.add('hidden');
 
-var PictureStore = require('./pictureStore');
-var store = new PictureStore();
-window.store = store;
 
 
 [].forEach.call(filters, function(element) {
@@ -71,7 +71,6 @@ function renderPictures(pageNumber, replace) {
   var pictureNumber = PAGE_SIZE * pageNumber;
 
   pagePictures.forEach(function(element) {
-    var Photo = require('./photo');
     var pictureElement = new Photo(element);
     pictureElement.render();
     pictureElement.number = pictureNumber++;

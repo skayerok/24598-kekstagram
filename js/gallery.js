@@ -1,5 +1,6 @@
-/*global store: true*/
 'use strict';
+
+var store = require('./pictureStore');
 
 /**
  * @construct
