@@ -61,7 +61,7 @@ function PictureStore() {
   };
 }
 
-if(!store) {
+if (!store) {
   store = new PictureStore();
 }
 
