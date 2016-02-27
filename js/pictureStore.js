@@ -3,6 +3,7 @@
 var store = null;
 
 /**
+* @construct
 * Записывает массив с информацией о картинках в свою локальную переменную list при помощи метода
 * setList, и отдает сохраненный массив при попощи метода getList
 * @type {object} PictureStore - массив элементов в формате JSON с информацией о картинках
@@ -12,14 +13,27 @@ function PictureStore() {
   var _list = [],
     _filter = [];
 
+/**
+ * возвращает ранее загруженный массив с информацией о картинках
+ * @return {array.object}
+ */
   function getList() {
     return [].concat(_filter);
   }
 
+/**
+ * возвращает отдельный элемент массива с информацией о картинке
+ * @param  {number} number номер элемента массива
+ * @return {object}
+ */
   function getItem(number) {
     return getList()[number];
   }
 
+/**
+ * записывает в _filter элементы массива, соответствующие выбранному фильтру
+ * @param {string} id выбранный фильтр
+ */
   function setFilter(id) {
     switch (id) {
 
@@ -44,10 +58,18 @@ function PictureStore() {
     }
   }
 
+/**
+ * сохраняет массив с информацией о картинках в _list
+ * @param {array.object} newItems массив с информацией о картинках
+ */
   function setList(newItems) {
     _list = _list.concat(newItems);
   }
 
+/**
+ * возвращает длину текущего массива с картинками
+ * @return {number} длина массива
+ */
   function getLength() {
     return _list.length;
   }
