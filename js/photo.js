@@ -19,6 +19,7 @@ Photo.prototype.render = function() {
   var i = 0;
   var pictureTemplate = document.querySelector('#picture-template');
 
+/* проверка на случай использования IE */
   if ('content' in pictureTemplate) {
     this.element = pictureTemplate.content.childNodes[1].cloneNode(true);
   } else {
@@ -32,11 +33,13 @@ Photo.prototype.render = function() {
   var oldPicture = this.element.querySelector('img');
   var newPicture = new Image(182, 182);
 
+/* отрисовывает элемент с картинкой на странице, заменяя старый (пустой) элемент новым */
   newPicture.onload = function() {
     clearTimeout(timer);
     this.element.replaceChild(newPicture, oldPicture);
   }.bind(this);
 
+/* при ошибке загрузки, отображает заглушку вместо картинки */
   newPicture.onerror = function() {
     this.element.classList.add('picture-load-failure');
   }.bind(this);
@@ -47,6 +50,7 @@ Photo.prototype.render = function() {
     newPicture.src = '';
     this.element.classList.add('picture-load-failure');
   }.bind(this), 5000);
+
 
   this.element.addEventListener('click', function(evt) {
     evt.preventDefault();

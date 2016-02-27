@@ -294,7 +294,6 @@ filterForm.addEventListener('reset', function(evt) {
 
 /**
 * Сохраняет выбранный фильтр в cookie со сроком жизни, равным времени, прошедшему с моего ДР
-* @return {[type]} [description]
 */
 function saveCookie() {
   var today = new Date();

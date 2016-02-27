@@ -4,6 +4,7 @@ var store = require('./pictureStore');
 
 /**
  * @construct
+ * Конструктор для работы с галереей, отображающейся по клику по изображению
  */
 function Gallery() {
   this.element = document.querySelector('.gallery-overlay');
@@ -19,7 +20,7 @@ function Gallery() {
 }
 
 /**
- * показывает галерею
+ * отображает галерею на странице
  */
 Gallery.prototype.show = function() {
   this.element.classList.remove('invisible');
@@ -39,7 +40,7 @@ Gallery.prototype.hide = function() {
 };
 
 /**
- * функция для обработки клика по кнопке закрытия
+ * функция для обработки клика по кнопке закрытия галереи
  */
 Gallery.prototype._onCloseClick = function() {
   this.hide();
@@ -55,7 +56,7 @@ Gallery.prototype._onPhotoClick = function() {
 };
 
 /**
- *  закрывает галерею по нажатию Esc и пролистывает ее при нажатии стрелочек на клавиатуре
+ *  закрывает галерею по нажатию Esc и пролистывает изображения при нажатии стрелочек на клавиатуре
  */
 Gallery.prototype._onDocumentKeyDown = function(evt) {
   switch (evt.keyCode) {
@@ -77,7 +78,7 @@ Gallery.prototype._onDocumentKeyDown = function(evt) {
 
 /**
  * подставляет картинку и количество лайков и комментариев в галерею.
- * @param {number} number номер картинки по порядку
+ * @param {number} number номер элемента по порядку
  */
 Gallery.prototype.setCurrentPicture = function(number) {
   var element = store.getItem(number);
