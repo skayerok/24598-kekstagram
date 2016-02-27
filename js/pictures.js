@@ -12,6 +12,7 @@ var currentPage = 0;
  */
 var PAGE_SIZE = 12;
 var gallery = new Gallery();
+var activeFilter = localStorage.getItem('activeFilter') || 'filter-popular';
 var filters = document.querySelector('.filters');
 filters.classList.add('hidden');
 
@@ -113,7 +114,8 @@ function getPictures(url) {
     try {
       var data = JSON.parse(evt.target.response);
       store.setList(data);
-      store.setFilter();
+      store.setFilter(activeFilter);
+      document.getElementById(activeFilter).checked = true;
       renderPictures(0);
     } catch (e) {
       //обработка ошибки
