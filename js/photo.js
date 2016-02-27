@@ -1,58 +1,55 @@
-/*eslint strict: [2, "function"]*/
-(function() {
-  'use strict';
+'use strict';
 
-  function Photo(data) {
-    this._data = data;
-    this.onClick = null;
-    this.number = null;
-    this.element = null;
+function Photo(data) {
+  this._data = data;
+  this.onClick = null;
+  this.number = null;
+  this.element = null;
+}
+
+Photo.prototype.render = function() {
+  var timer;
+  var i = 0;
+  var pictureTemplate = document.querySelector('#picture-template');
+
+  if ('content' in pictureTemplate) {
+    this.element = pictureTemplate.content.childNodes[1].cloneNode(true);
+  } else {
+    this.element = pictureTemplate.childNodes[1].cloneNode(true);
   }
 
-  Photo.prototype.render = function() {
-    var timer;
-    var i = 0;
-    var pictureTemplate = document.querySelector('#picture-template');
+  this.element.querySelector('.picture-comments').textContent = this._data.comments;
+  this.element.querySelector('.picture-likes').textContent = this._data.likes;
+  this.number = i++;
 
-    if ('content' in pictureTemplate) {
-      this.element = pictureTemplate.content.childNodes[1].cloneNode(true);
-    } else {
-      this.element = pictureTemplate.childNodes[1].cloneNode(true);
-    }
+  var oldPicture = this.element.querySelector('img');
+  var newPicture = new Image(182, 182);
 
-    this.element.querySelector('.picture-comments').textContent = this._data.comments;
-    this.element.querySelector('.picture-likes').textContent = this._data.likes;
-    this.number = i++;
+  newPicture.onload = function() {
+    clearTimeout(timer);
+    this.element.replaceChild(newPicture, oldPicture);
+  }.bind(this);
 
-    var oldPicture = this.element.querySelector('img');
-    var newPicture = new Image(182, 182);
+  newPicture.onerror = function() {
+    this.element.classList.add('picture-load-failure');
+  }.bind(this);
 
-    newPicture.onload = function() {
-      clearTimeout(timer);
-      this.element.replaceChild(newPicture, oldPicture);
-    }.bind(this);
+  newPicture.src = this._data.url;
 
-    newPicture.onerror = function() {
-      this.element.classList.add('picture-load-failure');
-    }.bind(this);
+  timer = setTimeout(function() {
+    newPicture.src = '';
+    this.element.classList.add('picture-load-failure');
+  }.bind(this), 5000);
 
-    newPicture.src = this._data.url;
-
-    timer = setTimeout(function() {
-      newPicture.src = '';
-      this.element.classList.add('picture-load-failure');
-    }.bind(this), 5000);
-
-    this.element.addEventListener('click', function(evt) {
-      evt.preventDefault();
-      if (this.element.classList.contains('picture') &&
-        !this.element.classList.contains('picture-load-failure')) {
-        if (typeof this.onClick === 'function') {
-          this.onClick();
-        }
+  this.element.addEventListener('click', function(evt) {
+    evt.preventDefault();
+    if (this.element.classList.contains('picture') &&
+      !this.element.classList.contains('picture-load-failure')) {
+      if (typeof this.onClick === 'function') {
+        this.onClick();
       }
-    }.bind(this));
-  };
+    }
+  }.bind(this));
+};
 
-  window.Photo = Photo;
-})();
+module.exports = Photo;
