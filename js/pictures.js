@@ -2,6 +2,10 @@
 
 var picturesContainer = document.querySelector('.pictures');
 var currentPage = 0;
+/**
+ * количество картинок, отрисовываемых за раз на странице
+ * @type {Number}
+ */
 var PAGE_SIZE = 12;
 var Gallery = require('./gallery');
 var gallery = new Gallery();
@@ -12,7 +16,9 @@ var PictureStore = require('./pictureStore');
 var store = new PictureStore();
 window.store = store;
 
-
+/**
+ * загружает картинки, соответствующие текущему выбранному фильтру
+ */
 [].forEach.call(filters, function(element) {
   element.onclick = function(evt) {
     var clickedElement = evt.target;
@@ -25,6 +31,10 @@ window.store = store;
 });
 
 
+/**
+ * проверяет, виден ли конец страницы на экране
+ * @return {boolean}
+ */
 function endVisible() {
   var lastPictureOffset = document.querySelector('.pictures').lastChild.getBoundingClientRect();
   var viewPortSize = window.innerHeight;
@@ -38,6 +48,9 @@ function endVisible() {
 
 var scrollTimeout;
 
+/**
+ * загружает еще PAGE_SIZE картинок, если достигнут конец страницы
+ */
 window.addEventListener('scroll', function() {
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(function() {
@@ -50,9 +63,8 @@ window.addEventListener('scroll', function() {
 
 /**
 * Отрисовывает картинки на странице
-* @param  {object.<Array>} pictures - массив с картинками и информацией о них
-* @param  {number} pageNumber - номер "страницы"
-* @param  {boolean} replace - если true, то перед отрисовкой картинок очищает ранее загруженные картинки
+* @param  {number} pageNumber - номер "страницы", т.е. пачки картинок, подгружаемых при достижени конца страницы
+* @param  {boolean=} replace - если true, то перед отрисовкой картинок очищает ранее загруженные картинки, используется при переключении фильтров
 */
 function renderPictures(pageNumber, replace) {
   if (replace) {

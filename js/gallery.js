@@ -76,7 +76,7 @@ Gallery.prototype._onDocumentKeyDown = function(evt) {
 
 /**
  * подставляет картинку и количество лайков и комментариев в галерею.
- * @param {Number} number номер картинки по порядку
+ * @param {number} number номер картинки по порядку
  */
 Gallery.prototype.setCurrentPicture = function(number) {
   var element = store.getItem(number);

@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @construct
+ * @param {Object} data объект с со ссылкой на изображение и информацией о нем: лайки, комментарии, дата загрузки
+ */
 function Photo(data) {
   this._data = data;
   this.onClick = null;
@@ -7,6 +11,9 @@ function Photo(data) {
   this.element = null;
 }
 
+/**
+ * отрисовывает изображение на странице
+ */
 Photo.prototype.render = function() {
   var timer;
   var i = 0;
