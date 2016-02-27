@@ -24,9 +24,7 @@ filters.classList.add('hidden');
   element.onclick = function(evt) {
     var clickedElement = evt.target;
     if (clickedElement.classList.contains('filters-radio')) {
-      activeFilter = clickedElement.id;
-      store.setFilter(activeFilter);
-      localStorage.setItem('activeFilter', activeFilter);
+      store.setFilter(clickedElement.id);
       currentPage = 0;
       renderPictures(currentPage, true);
     }

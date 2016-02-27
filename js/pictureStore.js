@@ -35,6 +35,8 @@ function PictureStore() {
  * @param {string} id выбранный фильтр
  */
   function setFilter(id) {
+    localStorage.setItem('activeFilter', id);
+
     switch (id) {
 
       case 'filter-new':
