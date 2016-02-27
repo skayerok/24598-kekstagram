@@ -93,6 +93,7 @@ function renderPictures(pageNumber, replace) {
     };
   });
   picturesContainer.appendChild(fragment);
+/* подгружает новые картинки до тех пор, пока виден конец страницы */
   while (endVisible()) {
     renderPictures(++currentPage);
   }
