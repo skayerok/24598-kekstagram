@@ -37,6 +37,7 @@ Gallery.prototype.hide = function() {
   this._closeButton.removeEventListener('click', this._onCloseClick);
   this._photo.removeEventListener('click', this._onPhotoClick);
   window.removeEventListener('keydown', this._onDocumentKeyDown);
+  location.hash = '';
 };
 
 /**
@@ -47,7 +48,7 @@ Gallery.prototype._onCloseClick = function() {
 };
 
 /**
- * функция для обработки клика по изображению
+ * загружает в галерею следующее изображение
  */
 Gallery.prototype._onPhotoClick = function() {
   if (this.number < store.getLength() - 1) {
@@ -78,11 +79,20 @@ Gallery.prototype._onDocumentKeyDown = function(evt) {
 
 /**
  * подставляет картинку и количество лайков и комментариев в галерею.
- * @param {number} number номер элемента по порядку
+ * @param {number|string} number номер элемента по порядку или url картинки
  */
-Gallery.prototype.setCurrentPicture = function(number) {
-  var element = store.getItem(number);
-  this.number = number;
+Gallery.prototype.setCurrentPicture = function(picture) {
+  var element;
+
+  if (typeof picture === 'number') {
+    element = store.getItem(picture);
+  } else if (typeof picture === 'string') {
+    element = store.getList().filter(function(item) {
+      return item.url === picture;
+    })[0];
+    console.log(element);
+  }
+  this.picture = picture;
   this._photo.src = element.url;
   this._likes.textContent = element.likes;
   this._comments.textContent = element.comments;
