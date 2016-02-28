@@ -52,7 +52,8 @@ Gallery.prototype._onCloseClick = function() {
  */
 Gallery.prototype._onPhotoClick = function() {
   if (this.number < store.getLength() - 1) {
-    this.setCurrentPicture(++this.number);
+    var nextPhoto = store.getItem(++this.number);
+    location.hash = 'photo/' + nextPhoto.url;
   }
 };
 
@@ -67,7 +68,8 @@ Gallery.prototype._onDocumentKeyDown = function(evt) {
 
     case 37:
       if (this.number > 0) {
-        this.setCurrentPicture(--this.number);
+        var previousPhoto = store.getItem(--this.number);
+        location.hash = 'photo/' + previousPhoto.url;
       }
       break;
 
@@ -90,7 +92,7 @@ Gallery.prototype.setCurrentPicture = function(picture) {
     element = store.getList().filter(function(item) {
       return item.url === picture;
     })[0];
-    console.log(element);
+    this.number = store.getList().indexOf(element);
   }
   this.picture = picture;
   this._photo.src = element.url;
