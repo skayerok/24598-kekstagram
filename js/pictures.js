@@ -61,6 +61,11 @@ window.addEventListener('scroll', function() {
   }, 100);
 });
 
+/**
+ * отслеживает изменения хэша страницы в адресной строке
+ */
+window.addEventListener('hashchange', checkHash);
+
 
 /**
 * Отрисовывает картинки на странице
@@ -133,8 +138,6 @@ function getPictures(url) {
       //обработка ошибки
       console.log('ошибка обработки данных!');
     }
-
-    window.addEventListener('hashchange', checkHash);
 
   };
 
