@@ -51,10 +51,7 @@ Gallery.prototype._onCloseClick = function() {
  * загружает в галерею следующее изображение
  */
 Gallery.prototype._onPhotoClick = function() {
-  if (this.number < store.getLength() - 1) {
-    var nextPhoto = store.getItem(++this.number);
-    location.hash = 'photo/' + nextPhoto.url;
-  }
+  location.hash = 'photo/' + store.getNextItem(this.number).url;
 };
 
 /**
@@ -67,10 +64,7 @@ Gallery.prototype._onDocumentKeyDown = function(evt) {
       break;
 
     case 37:
-      if (this.number > 0) {
-        var previousPhoto = store.getItem(--this.number);
-        location.hash = 'photo/' + previousPhoto.url;
-      }
+      location.hash = 'photo/' + store.getPreviousItem(this.number).url;
       break;
 
     case 39:
