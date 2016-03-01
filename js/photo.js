@@ -20,6 +20,20 @@ Photo.prototype.getUrl = function() {
 };
 
 /**
+ * метод для обработки клика по картинке. Если клик произошел именно по картинке, и картинка загружена, то вызывается this.onClick()
+ * @param  {event} evt
+ */
+Photo.prototype.click = function(evt) {
+  evt.preventDefault();
+  if (this.element.classList.contains('picture') &&
+    !this.element.classList.contains('picture-load-failure')) {
+    if (typeof this.onClick === 'function') {
+      this.onClick();
+    }
+  }
+};
+
+/**
  * отрисовывает изображение на странице
  */
 Photo.prototype.render = function() {
@@ -60,15 +74,7 @@ Photo.prototype.render = function() {
   }.bind(this), 5000);
 
 
-  this.element.addEventListener('click', function(evt) {
-    evt.preventDefault();
-    if (this.element.classList.contains('picture') &&
-      !this.element.classList.contains('picture-load-failure')) {
-      if (typeof this.onClick === 'function') {
-        this.onClick();
-      }
-    }
-  }.bind(this));
+  this.element.addEventListener('click', this.click.bind(this));
 };
 
 module.exports = Photo;
