@@ -5,13 +5,21 @@ var Photo = require('./photo');
 var store = require('./pictureStore');
 
 var picturesContainer = document.querySelector('.pictures');
+/**
+ * номер страницы (пачки изображений) по счету, отображаемых на странице
+ * @type {Number}
+ */
 var currentPage = 0;
 /**
  * количество картинок, отрисовываемых за раз на странице
- * @type {number}
+ * @type {Number}
  */
 var PAGE_SIZE = 12;
 var gallery = new Gallery();
+/**
+ * текущий выбранный фильтр
+ * @type {String}
+ */
 var activeFilter = localStorage.getItem('activeFilter') || 'filter-popular';
 var filters = document.querySelector('.filters');
 filters.classList.add('hidden');
@@ -79,6 +87,7 @@ function renderPictures(pageNumber, replace) {
       picturesContainer.removeChild(picturesContainer.childNodes[0]);
     }
   }
+
 
   var fragment = document.createDocumentFragment();
 
