@@ -31,6 +31,30 @@ function PictureStore() {
   }
 
 /**
+ * возвращает следующий элемент массива с информацией о картинке
+ * @param  {number} number номер элемента массива
+ * @return {object}
+ */
+  function getNextItem(number) {
+    if (number < getLength() - 1) {
+      ++number;
+    }
+    return getList()[number];
+  }
+
+/**
+ * возвращает предыдущий элемент массива с информацией о картинке
+ * @param  {number} number номер элемента массива
+ * @return {object}
+ */
+  function getPreviousItem(number) {
+    if (number > 0) {
+      --number;
+    }
+    return getList()[number];
+  }
+
+/**
  * записывает в _filter элементы массива, соответствующие выбранному фильтру
  * @param {string} id выбранный фильтр
  */
@@ -79,6 +103,8 @@ function PictureStore() {
   return {
     getList: getList,
     getItem: getItem,
+    getNextItem: getNextItem,
+    getPreviousItem: getPreviousItem,
     setList: setList,
     getLength: getLength,
     setFilter: setFilter

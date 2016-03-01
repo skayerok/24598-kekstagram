@@ -8,7 +8,7 @@ var picturesContainer = document.querySelector('.pictures');
 var currentPage = 0;
 /**
  * количество картинок, отрисовываемых за раз на странице
- * @type {Number}
+ * @type {number}
  */
 var PAGE_SIZE = 12;
 var gallery = new Gallery();
@@ -61,6 +61,11 @@ window.addEventListener('scroll', function() {
   }, 100);
 });
 
+/**
+ * отслеживает изменения хэша страницы в адресной строке
+ */
+window.addEventListener('hashchange', checkHash);
+
 
 /**
 * Отрисовывает картинки на странице
@@ -89,8 +94,7 @@ function renderPictures(pageNumber, replace) {
     pictureElement.number = pictureNumber++;
     fragment.appendChild(pictureElement.element);
     pictureElement.onClick = function() {
-      gallery.setCurrentPicture(pictureElement.number);
-      gallery.show();
+      location.hash = 'photo/' + pictureElement.getUrl();
     };
   });
   picturesContainer.appendChild(fragment);
@@ -100,6 +104,18 @@ function renderPictures(pageNumber, replace) {
   }
 }
 
+/**
+ * проверяет, соответствует ли текущий хэш страницы регулярному выражению, т.е. ссылке на какую-нибудь картинку и
+ * загружает эту картинку
+ * @return {string} ссылка на картинку
+ */
+function checkHash() {
+  var hashValid = location.hash.match(/#photo\/(\S+)/);
+  if (hashValid) {
+    gallery.setCurrentPicture(hashValid[1]);
+    gallery.show();
+  }
+}
 
 /**
 * Загружает картинки по заданному url. Информация должна быть в формате JSON
@@ -117,6 +133,7 @@ function getPictures(url) {
       store.setFilter(activeFilter);
       document.getElementById(activeFilter).checked = true;
       renderPictures(0);
+      checkHash();
     } catch (e) {
       //обработка ошибки
       console.log('ошибка обработки данных!');

@@ -12,6 +12,14 @@ function Photo(data) {
 }
 
 /**
+ * возвращает url картинки
+ * @return {string}
+ */
+Photo.prototype.getUrl = function() {
+  return this._data.url;
+};
+
+/**
  * отрисовывает изображение на странице
  */
 Photo.prototype.render = function() {
