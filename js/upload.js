@@ -73,8 +73,8 @@ var resizeControls = document.querySelector('.upload-resize-controls').elements;
  * @return {boolean}
  */
 function resizeFormIsValid() {
-  var resizeXValue = Number(resizeX.value);
-  var resizeYValue = Number(resizeY.value);
+  var resizeXValue = +resizeX.value;
+  var resizeYValue = +resizeY.value;
   var valid = true;
 
   resizeX.min = 0;
@@ -129,7 +129,7 @@ function resizeFormSetInput() {
 [].forEach.call(resizeControls, function(element) {
   element.addEventListener('change', resizeFormIsValid);
   element.addEventListener('input', function() {
-    currentResizer.setConstraint(Number(resizeX.value), Number(resizeY.value), Number(resizeSize.value));
+    currentResizer.setConstraint(+resizeX.value, +resizeY.value, +resizeSize.value);
   });
 });
 
