@@ -1,4 +1,4 @@
 'use strict';
 
-require('./upload');
-require('./pictures');
+require('./upload')();
+require('./pictures')();
