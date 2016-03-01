@@ -129,6 +129,14 @@ module.exports = function() {
   }
 
   /**
+   * ставит checked у активного фильтра
+   * @param  {Strubg} filter id фильтра
+   */
+  function checkFilter(filter) {
+    document.getElementById(filter).checked = true;
+  }
+
+  /**
   * Загружает картинки по заданному url. Информация должна быть в формате JSON
   * @param  {string} url - путь загрузки информации
   */
@@ -142,7 +150,7 @@ module.exports = function() {
         var data = JSON.parse(evt.target.response);
         store.setList(data);
         store.setFilter(activeFilter);
-        document.getElementById(activeFilter).checked = true;
+        checkFilter(activeFilter);
         renderPictures(0);
         checkHash();
       } catch (e) {
